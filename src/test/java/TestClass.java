@@ -1,5 +1,3 @@
-package org.example.test;
-
 import org.example.model.Car;
 import org.example.model.Direction;
 import org.example.model.Grid;

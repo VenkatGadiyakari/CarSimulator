@@ -1,5 +1,7 @@
 package org.example.model;
 
+import java.util.Objects;
+
 public class Car {
     private String name;
     private Position startPosition;
@@ -57,21 +59,21 @@ public class Car {
     }
 
     public void turnLeft(){
-        if(!isStopped){
-            finalDirection = finalDirection.turnLeft();
+        if(!this.isStopped){
+            this.finalDirection = this.finalDirection.turnLeft();
         }
 
     }
 
     public void turnRight(){
-        if(!isStopped){
-            finalDirection = finalDirection.turnRight();
+        if(!this.isStopped){
+            this.finalDirection = this.finalDirection.turnRight();
         }
 
     }
 
     public Position getNextForwardPosition(){
-        return endPosition.move(finalDirection);
+        return this.endPosition.move(this.finalDirection);
     }
 
     public void stop(){
@@ -79,7 +81,18 @@ public class Car {
     }
 
     public boolean isCarActive(){
-        return !isStopped;
+        return !this.isStopped;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(name, car.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }

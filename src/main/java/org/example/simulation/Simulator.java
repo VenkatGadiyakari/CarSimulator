@@ -31,39 +31,42 @@ public class Simulator {
 //        }
 //    }
     public void simulate(Map<Car,String> mp){
-        int index = 0;
-        boolean canMoveForward = true;
+        int step = 0;
+        boolean running = true;
 
+        //reset car state
         for(Map.Entry<Car,String> entry: mp.entrySet()){
             Car c = entry.getKey();
             c.setEndPosition(c.getStartPosition());
             c.setFinalDirection(c.getInitialDirection());
         }
 
-        while(canMoveForward){
-            Map<Position, List<Car>> occupied = new HashMap<>();
+        while(running){
+            Map<Position, List<Car>> gridState = new HashMap<>();
 
-            canMoveForward = false;
+            running = false;
             for(Map.Entry<Car,String> entry: mp.entrySet()){
                 Car c = entry.getKey();
                 String command = entry.getValue();
-                if(!c.isCarActive() || index>=command.length()){
-                    occupied.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
+                if(!c.isCarActive() || step>=command.length()){
+
+                    //add car position to grid current state , so other cars might collide later into this position
+                    gridState.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
                     continue;
                 }
 
-                canMoveForward = true;
-                switch (command.charAt(index)){
+                running = true;
+                switch (command.charAt(step)){
                     case 'L' -> c.turnLeft();
                     case 'R' -> c.turnRight();
                     case 'F' -> moveForward(c);
                 }
-                occupied.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
+                gridState.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
             }
 
 
             //collision detection
-            for (Map.Entry<Position, List<Car>> entry : occupied.entrySet()) {
+            for (Map.Entry<Position, List<Car>> entry : gridState.entrySet()) {
                 if (entry.getValue().size() > 1) {
                     for (Car c : entry.getValue()) {
                         List<String> cars = entry.getValue().stream().map(Car::getName).filter(name ->!name.equals(c.getName())).toList();
@@ -71,15 +74,15 @@ public class Simulator {
                         c.stop();
                         System.out.printf(
                                 "- %s, collides with %s  (%d,%d) at step %d%n",
-                                c.getName(), collisionCars, entry.getKey().getX(), entry.getKey().getY(), index + 1
+                                c.getName(), collisionCars, entry.getKey().getX(), entry.getKey().getY(), step + 1
                         );
                     }
-                    return;
                 }
             }
-            index+=1;
+            step+=1;
         }
 
+        //print final state of cars after collision
         for(Map.Entry<Car,String> entry: mp.entrySet()){
             Car c = entry.getKey();
             if(c.isCarActive()){
@@ -89,11 +92,10 @@ public class Simulator {
         }
     }
 
-    public void moveForward(Car car){
+    private void moveForward(Car car){
         Position nextPosition = car.getNextForwardPosition();
         if(!grid.isWithinBounds(nextPosition)){
             car.stop();
-            return;
         }
         else{
             car.setEndPosition(nextPosition);
