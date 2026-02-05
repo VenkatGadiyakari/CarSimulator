@@ -16,7 +16,7 @@ public class Grid {
     }
 
     public void addCar(Car car){
-        occupancy.computeIfAbsent(car.getStartPosition(), k -> new ArrayList<>()).add(car);
+        occupancy.computeIfAbsent(car.getPosition(), k -> new ArrayList<>()).add(car);
     }
 
     public boolean isWithinBounds(Position p){
@@ -31,16 +31,6 @@ public class Grid {
 
     public List<Car> getCarAt(Position pos) {
         return occupancy.getOrDefault(pos, new ArrayList<>());
-    }
-
-    public void removeCar(Car car) {
-        List<Car> list = occupancy.get(car.getStartPosition());
-        if (list != null) {
-            list.remove(car);
-            if (list.isEmpty()) {
-                occupancy.remove(car.getStartPosition());
-            }
-        }
     }
 
 

@@ -3,86 +3,71 @@ package org.example.model;
 import java.util.Objects;
 
 public class Car {
-    private String name;
-    private Position startPosition;
-    private Position endPosition;
-    private Direction initialDirection;
-    private Direction finalDirection;
-    private boolean isStopped = false;
+    private final String name;
+    private final CarConfig config;
+    private CarState state;
 
-    public Car(String name,Position position,Direction direction){
+    public Car(String name, Position start, Direction direction) {
         this.name = name;
-        this.startPosition = position;
-        this.endPosition = position;
-        this.initialDirection = direction;
-        this.finalDirection = direction;
+        this.config = new CarConfig(start, direction);
+        reset();
     }
 
-    public String getName() {
-        return name;
+    public String getName() { return name; }
+
+    public Position getPosition() { return state.position(); }
+
+    public Direction getDirection() { return state.direction(); }
+
+//    public boolean isActive() { return state.st; }
+
+    public void reset() {
+        this.state = new CarState(config.startPosition(), config.startDirection());
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Position getStartPosition() {
-        return startPosition;
-    }
-
-    public void setStartPosition(Position startPosition) {
-        this.startPosition = startPosition;
-    }
-
-    public Position getEndPosition() {
-        return endPosition;
-    }
-
-    public void setEndPosition(Position endPosition) {
-        this.endPosition = endPosition;
-    }
-
-    public Direction getInitialDirection() {
-        return initialDirection;
-    }
-
-    public void setInitialDirection(Direction direction) {
-        this.initialDirection = direction;
-    }
-
-    public Direction getFinalDirection() {
-        return finalDirection;
-    }
-
-    public void setFinalDirection(Direction direction) {
-        this.finalDirection = direction;
-    }
-
-    public void turnLeft(){
-        if(!this.isStopped){
-            this.finalDirection = this.finalDirection.turnLeft();
+    public void turnLeft() {
+        if (state.stop() || state.collision()){
+            return;
         }
-
+        state = state.turnLeft();
     }
 
-    public void turnRight(){
-        if(!this.isStopped){
-            this.finalDirection = this.finalDirection.turnRight();
+    public void turnRight() {
+        if (state.stop() || state.collision()){
+            return;
         }
+        state = state.turnRight();
+    }
+
+    public Position getNextForwardPosition() {
+        if (state.stop() || state.collision()){
+            return state.position();
+        }
+        return state.position().move(state.direction());
 
     }
 
-    public Position getNextForwardPosition(){
-        return this.endPosition.move(this.finalDirection);
+    public void moveTo(Position p) {
+        state = state.moveTo(p);
     }
 
-    public void stop(){
-        this.isStopped = true;
+    public void stop() {
+        state = state.stopped();
     }
 
-    public boolean isCarActive(){
-        return !this.isStopped;
+    public void collide(){
+        state = state.collided();
     }
+
+    public boolean isStopped(){
+        return state.stop();
+    }
+
+    public boolean isCollided(){
+        return state.collision();
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

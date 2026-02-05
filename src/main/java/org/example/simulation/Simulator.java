@@ -21,25 +21,19 @@ public class Simulator {
         grid.addCar(car);
     }
 
-//    public void simulate(Car car, String command){
-//        for(char c: command.toCharArray()){
-//            switch (c){
-//                case 'L' -> car.turnLeft();
-//                case 'R' -> car.turnRight();
-//                case 'F' -> moveForward(car);
-//            }
-//        }
-//    }
+    private void resetState(List<Car> cars){
+        for(Car c: cars){
+            c.reset();
+        }
+    }
+
     public void simulate(Map<Car,String> mp){
         int step = 0;
         boolean running = true;
 
         //reset car state
-        for(Map.Entry<Car,String> entry: mp.entrySet()){
-            Car c = entry.getKey();
-            c.setEndPosition(c.getStartPosition());
-            c.setFinalDirection(c.getInitialDirection());
-        }
+        List<Car> allCars = mp.keySet().stream().toList();
+        resetState(allCars);
 
         while(running){
             Map<Position, List<Car>> gridState = new HashMap<>();
@@ -48,20 +42,23 @@ public class Simulator {
             for(Map.Entry<Car,String> entry: mp.entrySet()){
                 Car c = entry.getKey();
                 String command = entry.getValue();
-                if(!c.isCarActive() || step>=command.length()){
 
-                    //add car position to grid current state , so other cars might collide later into this position
-                    gridState.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
-                    continue;
-                }
+                if(!c.isStopped() && !c.isCollided() && step<command.length()){
+                    running = true;
+                    switch (command.charAt(step)){
+                        case 'L' -> c.turnLeft();
+                        case 'R' -> c.turnRight();
+                        case 'F' -> moveForward(c);
+                    }
+                    gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
 
-                running = true;
-                switch (command.charAt(step)){
-                    case 'L' -> c.turnLeft();
-                    case 'R' -> c.turnRight();
-                    case 'F' -> moveForward(c);
                 }
-                gridState.computeIfAbsent(c.getEndPosition(), k -> new ArrayList<>()).add(c);
+                else{
+                    if(!c.isCollided() && c.isStopped()){
+                        //add active cars position that are stopped  to grid current state , so other cars might collide later into this position
+                        gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
+                    }
+                }
             }
 
 
@@ -71,6 +68,7 @@ public class Simulator {
                     for (Car c : entry.getValue()) {
                         List<String> cars = entry.getValue().stream().map(Car::getName).filter(name ->!name.equals(c.getName())).toList();
                         String collisionCars = String.join(",",cars);
+                        c.collide();
                         c.stop();
                         System.out.printf(
                                 "- %s, collides with %s  (%d,%d) at step %d%n",
@@ -85,20 +83,21 @@ public class Simulator {
         //print final state of cars after collision
         for(Map.Entry<Car,String> entry: mp.entrySet()){
             Car c = entry.getKey();
-            if(c.isCarActive()){
-                System.out.printf("%s, (%d, %d) %s", c.getName(),c.getEndPosition().getX(),c.getEndPosition().getY(),c.getFinalDirection().name());
+            if(!c.isCollided()){
+                System.out.printf("- %s, (%d, %d) %s", c.getName(),c.getPosition().getX(),c.getPosition().getY(),c.getDirection().name());
+                System.out.println();
             }
-            System.out.println();
         }
     }
 
     private void moveForward(Car car){
         Position nextPosition = car.getNextForwardPosition();
+//        System.out.println(nextPosition + " " + car.getDirection());
         if(!grid.isWithinBounds(nextPosition)){
             car.stop();
         }
         else{
-            car.setEndPosition(nextPosition);
+            car.moveTo(nextPosition);
         }
     }
 

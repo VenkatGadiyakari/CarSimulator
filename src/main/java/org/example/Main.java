@@ -58,8 +58,8 @@ public class Main {
                     System.out.println("Your current list of cars are: ");
                     for(Map.Entry<Car,String> entry: carHolder.entrySet()){
                         Car c = entry.getKey();
-                        System.out.printf("%s, (%d, %d) %s, %s", c.getName(),c.getStartPosition().getX(),c.getStartPosition().getY()
-                        ,c.getInitialDirection().name(), entry.getValue());
+                        System.out.printf("%s, (%d, %d) %s, %s", c.getName(),c.getPosition().getX(),c.getPosition().getY()
+                        ,c.getDirection().name(), entry.getValue());
                         System.out.println();
 
                     }
@@ -67,7 +67,6 @@ public class Main {
                 case "2":
                     System.out.println("After simulation the result is: ");
                     simulator.simulate(carHolder);
-
                     break;
                 default:
                     System.out.println("Please select either option 1 or 2");
