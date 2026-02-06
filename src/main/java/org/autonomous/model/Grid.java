@@ -1,4 +1,4 @@
-package org.example.model;
+package org.autonomous.model;
 public class Grid {
     int height;
     int width;

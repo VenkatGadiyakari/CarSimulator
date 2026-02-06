@@ -1,4 +1,4 @@
-package org.example.model;
+package org.autonomous.model;
 
 public enum Direction {
     N(1, 0),

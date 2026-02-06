@@ -1,9 +1,9 @@
-package org.example.simulation;
+package org.autonomous.simulation;
 
 
-import org.example.model.Car;
-import org.example.model.Grid;
-import org.example.model.Position;
+import org.autonomous.model.Car;
+import org.autonomous.model.Grid;
+import org.autonomous.model.Position;
 
 import java.util.ArrayList;
 import java.util.HashMap;

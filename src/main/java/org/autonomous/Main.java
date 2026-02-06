@@ -1,10 +1,10 @@
-package org.example;
+package org.autonomous;
 
-import org.example.simulation.Simulator;
-import org.example.model.Car;
-import org.example.model.Direction;
-import org.example.model.Grid;
-import org.example.model.Position;
+import org.autonomous.simulation.Simulator;
+import org.autonomous.model.Car;
+import org.autonomous.model.Direction;
+import org.autonomous.model.Grid;
+import org.autonomous.model.Position;
 
 import java.util.HashMap;
 import java.util.Map;

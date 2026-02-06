@@ -1,10 +1,9 @@
-package org.example.simulation;
+package org.autonomous.simulation;
 
-import org.example.model.Car;
-import org.example.model.Direction;
-import org.example.model.Grid;
-import org.example.model.Position;
-import org.junit.jupiter.api.BeforeAll;
+import org.autonomous.model.Car;
+import org.autonomous.model.Direction;
+import org.autonomous.model.Grid;
+import org.autonomous.model.Position;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;

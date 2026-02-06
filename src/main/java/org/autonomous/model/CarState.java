@@ -1,4 +1,4 @@
-package org.example.model;
+package org.autonomous.model;
 
 public record CarState(Position position, Direction direction, boolean stop, boolean collision) {
 

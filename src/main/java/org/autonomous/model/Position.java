@@ -1,4 +1,4 @@
-package org.example.model;
+package org.autonomous.model;
 
 import java.util.Objects;
 
