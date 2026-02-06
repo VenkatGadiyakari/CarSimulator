@@ -93,10 +93,7 @@ public class Simulator {
     private void moveForward(Car car){
         Position nextPosition = car.getNextForwardPosition();
 //        System.out.println(nextPosition + " " + car.getDirection());
-        if(!grid.isWithinBounds(nextPosition)){
-            car.stop();
-        }
-        else{
+        if(grid.isWithinBounds(nextPosition)){
             car.moveTo(nextPosition);
         }
     }
