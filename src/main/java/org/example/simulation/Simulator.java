@@ -17,10 +17,6 @@ public class Simulator {
         this.grid = grid;
     }
 
-    public void addCar(Car car) {
-        grid.addCar(car);
-    }
-
     private void resetState(List<Car> cars){
         for(Car c: cars){
             c.reset();

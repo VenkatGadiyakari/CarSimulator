@@ -19,7 +19,6 @@ public class Car {
 
     public Direction getDirection() { return state.direction(); }
 
-//    public boolean isActive() { return state.st; }
 
     public void reset() {
         this.state = new CarState(config.startPosition(), config.startDirection());

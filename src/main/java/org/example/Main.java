@@ -34,12 +34,11 @@ public class Main {
                 [2] Run simulation
                 """;
         while(true){
-            System.out.println(options);
             String command = sc.nextLine();
-
             if(command.equals("exit")){
                 break;
             }
+            System.out.println(options);
             switch (command){
                 case "1":
                     System.out.println("Please enter the name of the car:");
@@ -72,7 +71,5 @@ public class Main {
                     System.out.println("Please select either option 1 or 2");
             }
         }
-
-
     }
 }
