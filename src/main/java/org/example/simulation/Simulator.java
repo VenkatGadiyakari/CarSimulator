@@ -54,6 +54,8 @@ public class Simulator {
 
                 }
                 else{
+                    //car exceeded its command length and can be stopped;
+                    c.stop();
                     if(!c.isCollided() && c.isStopped()){
                         //add active cars position that are stopped  to grid current state , so other cars might collide later into this position
                         gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
