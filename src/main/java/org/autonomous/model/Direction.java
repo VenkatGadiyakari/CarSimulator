@@ -14,6 +14,14 @@ public enum Direction {
         this.dy = dy;
     }
 
+    public int dx() {
+        return dx;
+    }
+
+    public int dy() {
+        return dy;
+    }
+
     public Direction turnLeft() {
         switch (this) {
             case N: return W;
