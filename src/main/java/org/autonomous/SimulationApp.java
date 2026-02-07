@@ -1,9 +1,11 @@
 package org.autonomous;
 
+import org.autonomous.collision.CollisionPolicy;
 import org.autonomous.model.Car;
 import org.autonomous.model.Direction;
 import org.autonomous.model.Grid;
 import org.autonomous.model.Position;
+import org.autonomous.simulation.SimulationReporter;
 import org.autonomous.simulation.Simulator;
 
 import java.util.LinkedHashMap;
@@ -15,6 +17,8 @@ public class SimulationApp {
     private final Scanner scanner = new Scanner(System.in);
     private Simulator simulator;
     private final Map<Car, String> carCommands = new LinkedHashMap<>();
+    private final SimulationReporter simulationReporter = new SimulationReporter();
+    private final CollisionPolicy collisionPolicy = new CollisionPolicy(simulationReporter);
 
     public void run(){
         showWelcome();
@@ -37,7 +41,7 @@ public class SimulationApp {
         scanner.nextLine();
 
         Grid grid = new Grid(height, width);
-        simulator = new Simulator(grid);
+        simulator = new Simulator(grid,simulationReporter,collisionPolicy);
 
         System.out.printf("You have created a field of %d x %d%n", width, height);
     }
@@ -94,6 +98,7 @@ public class SimulationApp {
 
     private void printCars() {
         System.out.println("Your current list of cars are:");
+        carCommands.keySet().forEach(Car::reset);
         carCommands.forEach((car, commands) -> {
             System.out.printf(
                     "%s, (%d, %d) %s, %s%n",

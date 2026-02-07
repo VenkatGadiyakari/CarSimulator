@@ -1,6 +1,7 @@
 package org.autonomous.simulation;
 
 
+import org.autonomous.collision.CollisionPolicy;
 import org.autonomous.model.Car;
 import org.autonomous.model.Grid;
 import org.autonomous.model.Position;
@@ -12,9 +13,13 @@ import java.util.Map;
 
 public class Simulator {
     private final Grid grid;
+    private final SimulationReporter simulationReporter;
+    private final CollisionPolicy collisionPolicy;
 
-    public Simulator(Grid grid){
+    public Simulator(Grid grid, SimulationReporter simulationReporter, CollisionPolicy collisionPolicy){
         this.grid = grid;
+        this.simulationReporter = simulationReporter;
+        this.collisionPolicy = collisionPolicy;
     }
 
     private void resetState(List<Car> cars){
@@ -61,40 +66,21 @@ public class Simulator {
 
 
             //collision detection
-            for (Map.Entry<Position, List<Car>> entry : gridState.entrySet()) {
-                if (entry.getValue().size() > 1) {
-                    for (Car c : entry.getValue()) {
-                        List<String> cars = entry.getValue().stream().map(Car::getName).filter(name ->!name.equals(c.getName())).toList();
-                        String collisionCars = String.join(",",cars);
-                        c.collide();
-                        c.stop();
-                        System.out.printf(
-                                "- %s, collides with %s  (%d,%d) at step %d%n",
-                                c.getName(), collisionCars, entry.getKey().getX(), entry.getKey().getY(), step + 1
-                        );
-                    }
-                }
-            }
+            collisionPolicy.detectCollision(gridState,step);
             step+=1;
         }
 
         //print final state of cars after collision
-        for(Map.Entry<Car,String> entry: mp.entrySet()){
-            Car c = entry.getKey();
-            if(!c.isCollided()){
-                System.out.printf("- %s, (%d, %d) %s", c.getName(),c.getPosition().getX(),c.getPosition().getY(),c.getDirection().name());
-                System.out.println();
-            }
-        }
+        simulationReporter.reportFinalState(allCars);
+
+
     }
 
     private void moveForward(Car car){
         Position nextPosition = car.getNextForwardPosition();
-//        System.out.println(nextPosition + " " + car.getDirection());
         if(grid.isWithinBounds(nextPosition)){
             car.moveTo(nextPosition);
         }
     }
-
 
 }

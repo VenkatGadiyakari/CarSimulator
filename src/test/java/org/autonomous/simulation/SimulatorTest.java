@@ -1,5 +1,6 @@
 package org.autonomous.simulation;
 
+import org.autonomous.collision.CollisionPolicy;
 import org.autonomous.model.Car;
 import org.autonomous.model.Direction;
 import org.autonomous.model.Grid;
@@ -21,7 +22,9 @@ class SimulatorTest {
         Position car1Position = new Position(1,2);
         Direction car1Direction = Direction.N;
         Car c1 = new Car("A",car1Position,car1Direction);
-        Simulator simulator = new Simulator(grid);
+        SimulationReporter simulationReporter = new SimulationReporter();
+        CollisionPolicy collisionPolicy = new CollisionPolicy(simulationReporter);
+        Simulator simulator = new Simulator(grid,simulationReporter,collisionPolicy);
         String car1Command = "FFRFFFFRRL";
         Map<Car,String> carCommandMap = new HashMap<>();
         carCommandMap.put(c1,car1Command);
@@ -40,7 +43,7 @@ class SimulatorTest {
         String output = out.toString().trim();
         System.out.println("Captured output:");
         System.out.println(output);
-        assertEquals("- A, (3, 6) S", output);
+        assertEquals("- A, (3,6) S", output);
     }
 
     @Test
@@ -58,7 +61,9 @@ class SimulatorTest {
         String car1Command = "FFRFFFFRRL";
         String car2Command = "FFLFFFFFFF";
 
-        Simulator simulator = new Simulator(grid);
+        SimulationReporter simulationReporter = new SimulationReporter();
+        CollisionPolicy collisionPolicy = new CollisionPolicy(simulationReporter);
+        Simulator simulator = new Simulator(grid,simulationReporter,collisionPolicy);
 
         Map<Car,String> carCommandMap = new HashMap<>();
         carCommandMap.put(c1,car1Command);
@@ -79,8 +84,8 @@ class SimulatorTest {
         String output = out.toString().trim();
 //        System.out.println("Captured output:");
 //        System.out.println(output);
-        assertEquals("- A, collides with B  (3,6) at step 7\n" +
-                "- B, collides with A  (3,6) at step 7", output);
+        assertEquals("- A, collides with B (3,6) at step 7\n" +
+                "- B, collides with A (3,6) at step 7", output);
     }
 
 }
