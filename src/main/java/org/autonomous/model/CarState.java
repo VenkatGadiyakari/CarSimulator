@@ -15,11 +15,11 @@ public record CarState(Position position, Direction direction, boolean stop, boo
     }
 
     public CarState stopped(){
-        return new CarState(position, direction, false, collision);
+        return new CarState(position, direction, true, collision);
     }
 
     public CarState collided(){
-        return new CarState(position, direction, false, true);
+        return new CarState(position, direction, stop, true);
     }
 
 

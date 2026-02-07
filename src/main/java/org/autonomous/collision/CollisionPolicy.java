@@ -23,7 +23,6 @@ public class CollisionPolicy {
                     simulationReporter.reportCollision(c,cars,entry.getKey(),step);
                     c.collide();
                     c.stop();
-
                 }
             }
         }
