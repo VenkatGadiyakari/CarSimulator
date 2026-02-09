@@ -18,5 +18,27 @@ Multiple cars can be placed on the same grid and execute movement commands simul
 ```bash
 git clone <repo-url>
 cd autonomous-car-simulation
+```
 
 
+Check Java installation:
+
+```bash
+java -version
+```
+
+Check for maven installation
+
+```bash
+mvn -version
+```
+
+### Running the project
+```bash
+mvn clean compile
+mvn exec:java
+```
+
+### Executing the test cases
+```
+mvn test
