@@ -30,18 +30,13 @@ class SimulatorTest {
         carCommandMap.put(c1,car1Command);
         simulator.simulate(carCommandMap);
 
-        PrintStream originalOut = System.out;
-
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
         simulator.simulate(carCommandMap);
 
-        System.setOut(originalOut);
-
         String output = out.toString().trim();
-        System.out.println("Captured output:");
-        System.out.println(output);
+
         assertEquals("- A, (3,6) S", output);
     }
 
@@ -70,13 +65,10 @@ class SimulatorTest {
 
         simulator.simulate(carCommandMap);
 
-        PrintStream originalOut = System.out;
-
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
         simulator.simulate(carCommandMap);
-        System.setOut(originalOut);
 
         String output = out.toString().trim();
         assertEquals("- A, collides with B (3,6) at step 7\n" +
