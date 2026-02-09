@@ -36,7 +36,6 @@ class SimulatorTest {
         System.setOut(new PrintStream(out));
 
         simulator.simulate(carCommandMap);
-//        System.out.println(c1.getPosition());
 
         System.setOut(originalOut);
 
@@ -77,13 +76,9 @@ class SimulatorTest {
         System.setOut(new PrintStream(out));
 
         simulator.simulate(carCommandMap);
-//        System.out.println(c1.getPosition());
-
         System.setOut(originalOut);
 
         String output = out.toString().trim();
-//        System.out.println("Captured output:");
-//        System.out.println(output);
         assertEquals("- A, collides with B (3,6) at step 7\n" +
                 "- B, collides with A (3,6) at step 7", output);
     }

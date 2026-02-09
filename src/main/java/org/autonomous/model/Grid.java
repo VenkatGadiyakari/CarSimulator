@@ -11,6 +11,6 @@ public class Grid {
     public boolean isWithinBounds(Position p){
         int x = p.getX();
         int y = p.getY();
-        return x>=0 && y>=0 && x<height && y<width;
+        return x>=0 && y>=0 && x<width && y<height;
     }
 }
