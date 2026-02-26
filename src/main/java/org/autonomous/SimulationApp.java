@@ -38,6 +38,11 @@ public class SimulationApp {
     private void initializeGrid() {
         int width = scanner.nextInt();
         int height = scanner.nextInt();
+        while(width<=0 || height<=0){
+            System.out.println("height and width should be positive.  Please enter the width and height of the simulation field in x y format: ");
+            width=scanner.nextInt();
+            height=scanner.nextInt();
+        }
         scanner.nextLine();
 
         Grid grid = new Grid(height, width);
@@ -77,6 +82,7 @@ public class SimulationApp {
         System.out.println("Please enter initial position of car " + name + " in x y Direction format:");
         int x = scanner.nextInt();
         int y = scanner.nextInt();
+
         char direction = scanner.next().charAt(0);
         scanner.nextLine();
 

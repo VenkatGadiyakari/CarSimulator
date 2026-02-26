@@ -36,8 +36,12 @@ public class Simulator {
         List<Car> allCars = mp.keySet().stream().toList();
         resetState(allCars);
 
+        Map<Position, List<Car>> gridState = new HashMap<>();
+
         while(running){
-            Map<Position, List<Car>> gridState = new HashMap<>();
+            for(Car c: allCars){
+                gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
+            }
 
             running = false;
             for(Map.Entry<Car,String> entry: mp.entrySet()){
@@ -57,17 +61,16 @@ public class Simulator {
                 else{
                     //car exceeded its command length and can be stopped;
                     c.stop();
-                    if(!c.isCollided() && c.isStopped()){
-                        //add active cars position that are stopped  to grid current state , so other cars might collide later into this position
-                        gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
-                    }
+
+                    //add active cars position that are stopped  to grid current state , so other cars might collide later into this position
+                    gridState.computeIfAbsent(c.getPosition(), k -> new ArrayList<>()).add(c);
+
                 }
+                collisionPolicy.detectCollision(gridState,step);
             }
 
-
-            //collision detection
-            collisionPolicy.detectCollision(gridState,step);
             step+=1;
+            gridState = new HashMap<>();
         }
 
         //print final state of cars after collision

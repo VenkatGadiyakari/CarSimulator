@@ -17,7 +17,8 @@ public class CollisionPolicy {
 
     public void detectCollision(Map<Position, List<Car>> gridState, int step) {
         for (Map.Entry<Position, List<Car>> entry : gridState.entrySet()) {
-            if (entry.getValue().size() > 1) {
+            List<Car> carsCollidingNow = entry.getValue().stream().filter(car -> !car.isCollided()).toList();
+            if (entry.getValue().size() > 1 && !carsCollidingNow.isEmpty()) {
                 for (Car c : entry.getValue()) {
                     List<String> cars = entry.getValue().stream().map(Car::getName).filter(name ->!name.equals(c.getName())).toList();
                     simulationReporter.reportCollision(c,cars,entry.getKey(),step);
