@@ -25,21 +25,21 @@ public class Car {
     }
 
     public void turnLeft() {
-        if (state.stop() || state.collision()){
+        if (state.isStopped() || state.isCollided()){
             return;
         }
         state = state.turnLeft();
     }
 
     public void turnRight() {
-        if (state.stop() || state.collision()){
+        if (state.isStopped() || state.isCollided()){
             return;
         }
         state = state.turnRight();
     }
 
     public Position getNextForwardPosition() {
-        if (state.stop() || state.collision()){
+        if (state.isStopped() || state.isCollided()){
             return state.position();
         }
         return state.position().move(state.direction());
@@ -51,19 +51,19 @@ public class Car {
     }
 
     public void stop() {
-        state = state.stopped();
+        state = state.stop();
     }
 
     public void collide(){
-        state = state.collided();
+        state = state.collide();
     }
 
     public boolean isStopped(){
-        return state.stop();
+        return state.isStopped();
     }
 
     public boolean isCollided(){
-        return state.collision();
+        return state.isCollided();
     }
 
 
